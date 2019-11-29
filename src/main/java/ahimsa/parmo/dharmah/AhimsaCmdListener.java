@@ -1,17 +1,12 @@
 package ahimsa.parmo.dharmah;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
+import io.vavr.collection.List;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class AhimsaCmdListener extends AhimsaBaseListener {
 
@@ -26,21 +21,20 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
     @Override
     public void enterCommand(AhimsaParser.CommandContext ctx) {
         String fileName = ctx.FILENAME().getText();
-        System.out.println("filename : "+ctx.FILENAME().getText());
         File file = new File(fileName);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            contents = reader.lines().map(Collections::singletonList).collect(Collectors.toList());
+            List<String> strings = List.ofAll(reader.lines());
+            contents = strings.map(List::of);
         } catch (IOException e) {
-            throw new RuntimeException("File read failed.");
+            throw new AhimsaError(e);
         }
     }
 
     @Override
     public void exitCommand(AhimsaParser.CommandContext ctx) {
-        if (contents == null) {
-            return;
+        if (contents != null) {
+            contents.forEach(wordList -> System.out.println(String.join(" ", wordList)));
         }
-        contents.forEach(wordList -> System.out.println(String.join(" ", wordList)));
     }
 
 
@@ -51,45 +45,39 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
     }
 
     @Override
-    public void exitCount(AhimsaParser.CountContext ctx) {
-
-    }
-
-    @Override
-    public void enterRipApartBy(AhimsaParser.RipApartByContext ctx) {
-        String splitByVar = ctx.ARGS().getText();
-        contents = contents.stream().map(line -> splitByVar(line, splitByVar)).collect(Collectors.toList());
+    public void enterSplitBy(AhimsaParser.SplitByContext ctx) {
+        contents = contents.map(line -> splitByVar(line, ctx.WORD().getText()));
     }
 
     private List<String> splitByVar(List<String> list, String splitByVar) {
         if (list.size() != 1) {
-            throw new RuntimeException("How to split already split words?");
+            throw new AhimsaError("How to split already split words?");
         }
-        return Arrays.asList(list.get(0).split(splitByVar));
+        return List.of(list.get(0).split(splitByVar));
     }
 
     @Override
-    public void exitRipApartBy(AhimsaParser.RipApartByContext ctx) {
+    public void enterReplace(AhimsaParser.ReplaceContext ctx) {
+        contents = contents.map(line -> replaceAll(line, ctx.WORD(0).getText(), ctx.WORD(1).getText()));
+    }
 
+    private List<String> replaceAll(List<String> line, String replaced, String replacement) {
+        return line.map(word -> word.replaceAll(replaced, replacement));
     }
 
     @Override
-    public void visitTerminal(TerminalNode terminalNode) {
+    public void enterTakeColumns(AhimsaParser.TakeColumnsContext ctx) {
+        List<Integer> columns = List.ofAll(ctx.WORD()).map(TerminalNode::getText).map(Integer::parseInt);
+        contents = contents.map(line -> filterColumns(line,columns));
 
     }
 
-    @Override
-    public void visitErrorNode(ErrorNode errorNode) {
-
-    }
-
-    @Override
-    public void enterEveryRule(ParserRuleContext parserRuleContext) {
-
-    }
-
-    @Override
-    public void exitEveryRule(ParserRuleContext parserRuleContext) {
-
+    private List<String> filterColumns(List<String> data, List<Integer> columns){
+        String[] filtered = new String[columns.size()];
+        int i=0;
+        for (int idx:columns){
+            filtered[i++] = data.get(idx-1);
+        }
+        return List.of(filtered);
     }
 }

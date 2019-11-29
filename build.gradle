@@ -19,6 +19,7 @@ repositories {
 dependencies {
     antlr "org.antlr:antlr4:4.7.2"
     compile "org.antlr:antlr4-runtime:4.7.2"
+    compile "io.vavr:vavr:1.0.0-alpha-3"
 }
 
 generateGrammarSource{
