@@ -1,5 +1,6 @@
-package ahimsa.parmo.dharmah.eval;
+package ahimsa.parmo.dharmah.eval.pipe;
 
+import ahimsa.parmo.dharmah.eval.Eval;
 import ahimsa.parmo.dharmah.utils.Input;
 import ahimsa.parmo.dharmah.utils.Output;
 import io.vavr.collection.List;
@@ -12,11 +13,11 @@ public class EvalPipe {
     private final Deque<Eval> deque = new ArrayDeque<>();
     private final String fileName;
 
-    private EvalPipe(String fileName) {
+    EvalPipe(String fileName) {
         this.fileName = fileName;
     }
 
-    private void addEvalStep(Eval eval) {
+    void addEvalStep(Eval eval) {
         deque.add(eval);
     }
 
@@ -37,27 +38,5 @@ public class EvalPipe {
         }
 
         Output.out(evaluated);
-    }
-
-    public static EvalPipeBuilder builder(String fileName) {
-        return new EvalPipeBuilder(fileName);
-    }
-
-    public static class EvalPipeBuilder {
-
-        private EvalPipe evalPipe;
-
-        public EvalPipeBuilder(String fileName) {
-            evalPipe = new EvalPipe(fileName);
-        }
-
-        public EvalPipeBuilder after(Eval eval) {
-            evalPipe.addEvalStep(eval);
-            return this;
-        }
-
-        public EvalPipe build() {
-            return evalPipe;
-        }
     }
 }

@@ -2,21 +2,22 @@ package ahimsa.parmo.dharmah.listener;
 
 import ahimsa.parmo.dharmah.AhimsaBaseListener;
 import ahimsa.parmo.dharmah.AhimsaParser;
-import ahimsa.parmo.dharmah.eval.*;
 import ahimsa.parmo.dharmah.eval.impl.Count;
 import ahimsa.parmo.dharmah.eval.impl.Replace;
 import ahimsa.parmo.dharmah.eval.impl.SplitBy;
 import ahimsa.parmo.dharmah.eval.impl.TakeColumns;
+import ahimsa.parmo.dharmah.eval.pipe.EvalPipe;
+import ahimsa.parmo.dharmah.eval.pipe.EvalPipeBuilder;
 import io.vavr.collection.List;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class AhimsaCmdListener extends AhimsaBaseListener {
 
-    private EvalPipe.EvalPipeBuilder evalPipeBuilder;
+    private EvalPipeBuilder evalPipeBuilder;
 
     @Override
     public void enterCommand(AhimsaParser.CommandContext ctx) {
-        evalPipeBuilder = EvalPipe.builder(ctx.FILENAME().getText());
+        evalPipeBuilder = new EvalPipeBuilder(ctx.FILENAME().getText());
     }
 
     @Override
