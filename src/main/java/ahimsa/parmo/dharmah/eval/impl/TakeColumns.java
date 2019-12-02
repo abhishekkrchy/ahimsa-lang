@@ -1,5 +1,6 @@
-package ahimsa.parmo.dharmah.eval;
+package ahimsa.parmo.dharmah.eval.impl;
 
+import ahimsa.parmo.dharmah.eval.Eval;
 import io.vavr.collection.List;
 
 public class TakeColumns implements Eval {

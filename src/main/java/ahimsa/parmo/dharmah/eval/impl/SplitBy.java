@@ -1,6 +1,7 @@
-package ahimsa.parmo.dharmah.eval;
+package ahimsa.parmo.dharmah.eval.impl;
 
 import ahimsa.parmo.dharmah.AhimsaError;
+import ahimsa.parmo.dharmah.eval.Eval;
 import io.vavr.collection.List;
 
 public class SplitBy implements Eval {
@@ -13,7 +14,7 @@ public class SplitBy implements Eval {
 
     @Override
     public List<List<String>> eval(List<List<String>> data) {
-       return data.map(this::splitByVar);
+        return data.map(this::splitByVar);
     }
 
     private List<String> splitByVar(List<String> list) {
