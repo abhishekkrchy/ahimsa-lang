@@ -5,7 +5,7 @@ command : (keyword)+ FILENAME;
 keyword : 'count'                           #count
         | 'splitBy' WORD                    #splitBy
         | 'replace' WORD WORD               #replace
-        | 'takeColumns' WORD+                #takeColumns
+        | 'takeColumns' WORD+               #takeColumns
         ;
 
 WORD : [a-zA-Z0-9]+;
