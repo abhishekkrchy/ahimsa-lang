@@ -6,7 +6,6 @@ import ahimsa.parmo.dharmah.eval.impl.Count;
 import ahimsa.parmo.dharmah.eval.impl.Replace;
 import ahimsa.parmo.dharmah.eval.impl.SplitBy;
 import ahimsa.parmo.dharmah.eval.impl.TakeColumns;
-import ahimsa.parmo.dharmah.eval.pipe.EvalPipe;
 import ahimsa.parmo.dharmah.eval.pipe.EvalPipeBuilder;
 import io.vavr.collection.List;
 import org.antlr.v4.runtime.tree.TerminalNode;

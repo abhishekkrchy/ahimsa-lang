@@ -2,10 +2,12 @@ grammar Ahimsa;
 
 command : (keyword)+ FILENAME;
 
-keyword : 'count'                           #count
+keyword : 'rows'                            #count
+        | 'columns'                         #countColumns
         | 'splitBy' WORD                    #splitBy
         | 'replace' WORD WORD               #replace
         | 'takeColumns' WORD+               #takeColumns
+        | 'find' WORD+                      #findWords
         ;
 
 WORD : [a-zA-Z0-9]+;
