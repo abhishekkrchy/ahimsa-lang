@@ -46,6 +46,11 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
         evalPipeBuilder.after(new FindWords(List.ofAll(ctx.WORD()).map(TerminalNode::getText)));
     }
 
+    @Override
+    public void enterMatch(AhimsaParser.MatchContext ctx) {
+        evalPipeBuilder.after(new Match(ctx.PATTERN().getText()));
+    }
+
     public void evaluate() {
         evalPipeBuilder.build().eval();
     }
