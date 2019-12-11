@@ -2,10 +2,7 @@ package ahimsa.parmo.dharmah.listener;
 
 import ahimsa.parmo.dharmah.AhimsaBaseListener;
 import ahimsa.parmo.dharmah.AhimsaParser;
-import ahimsa.parmo.dharmah.eval.impl.Count;
-import ahimsa.parmo.dharmah.eval.impl.Replace;
-import ahimsa.parmo.dharmah.eval.impl.SplitBy;
-import ahimsa.parmo.dharmah.eval.impl.TakeColumns;
+import ahimsa.parmo.dharmah.eval.impl.*;
 import ahimsa.parmo.dharmah.eval.pipe.EvalPipeBuilder;
 import io.vavr.collection.List;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -25,6 +22,11 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
     }
 
     @Override
+    public void enterCountColumns(AhimsaParser.CountColumnsContext ctx) {
+        evalPipeBuilder.after(new CountColumns());
+    }
+
+    @Override
     public void enterSplitBy(AhimsaParser.SplitByContext ctx) {
         evalPipeBuilder.after(new SplitBy(ctx.WORD().getText()));
     }
@@ -37,6 +39,11 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
     @Override
     public void enterTakeColumns(AhimsaParser.TakeColumnsContext ctx) {
         evalPipeBuilder.after(new TakeColumns(List.ofAll(ctx.WORD()).map(TerminalNode::getText)));
+    }
+
+    @Override
+    public void enterFindWords(AhimsaParser.FindWordsContext ctx) {
+        evalPipeBuilder.after(new FindWords(List.ofAll(ctx.WORD()).map(TerminalNode::getText)));
     }
 
     public void evaluate() {
