@@ -53,9 +53,9 @@ You practically raised the dead
 ➜  ~ ahimsa find hole dead  ~/Desktop/someData
 Eye hole deep in muddy waters
 You practically raised the dead
-➜  ~ ahimsa match {Who WORD you to WORD your} ~/Desktop/someData
+➜  ~ ahimsa match Who WORD you to WORD your ~/Desktop/someData
 are wave
-➜  ~ ahimsa match {Eye WORD deep in WORD waters} find hole dead  ~/Desktop/someData
+➜  ~ ahimsa match Eye WORD deep in WORD waters find hole dead  ~/Desktop/someData
 hole muddy
 </code>
 </pre>
