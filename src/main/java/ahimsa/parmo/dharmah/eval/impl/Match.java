@@ -8,7 +8,7 @@ public class Match implements Eval {
     private final String matchPattern;
 
     public Match(String matchPattern) {
-        this.matchPattern = matchPattern.substring(1, matchPattern.length() - 1);
+        this.matchPattern = matchPattern;
     }
 
     @Override
@@ -30,6 +30,6 @@ public class Match implements Eval {
         if (!matchPattern.endsWith("WORD")) {
             word = word.substring(0, start);
         }
-        return word;
+        return word.trim();
     }
 }

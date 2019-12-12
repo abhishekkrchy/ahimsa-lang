@@ -5,6 +5,8 @@ import ahimsa.parmo.dharmah.AhimsaParser;
 import ahimsa.parmo.dharmah.eval.impl.*;
 import ahimsa.parmo.dharmah.eval.pipe.EvalPipeBuilder;
 import io.vavr.collection.List;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class AhimsaCmdListener extends AhimsaBaseListener {
@@ -13,7 +15,7 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
 
     @Override
     public void enterCommand(AhimsaParser.CommandContext ctx) {
-        evalPipeBuilder = new EvalPipeBuilder(ctx.FILENAME().getText());
+        evalPipeBuilder = new EvalPipeBuilder(ctx.WORD().getText());
     }
 
     @Override
@@ -48,10 +50,17 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
 
     @Override
     public void enterMatch(AhimsaParser.MatchContext ctx) {
-        evalPipeBuilder.after(new Match(ctx.PATTERN().getText()));
+        evalPipeBuilder.after(new Match(getFullText(ctx).replace("match", "").trim()));
     }
 
     public void evaluate() {
         evalPipeBuilder.build().eval();
+    }
+
+    private String getFullText(ParserRuleContext context) {
+        if (context.start == null || context.stop == null || context.start.getStartIndex() < 0 || context.stop.getStopIndex() < 0) {
+            return context.getText();
+        }
+        return context.start.getInputStream().getText(Interval.of(context.start.getStartIndex(), context.stop.getStopIndex()));
     }
 }

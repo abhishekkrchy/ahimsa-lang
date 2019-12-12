@@ -1,6 +1,6 @@
 grammar Ahimsa;
 
-command : (keyword)+ FILENAME;
+command : (keyword)+ WORD;
 
 keyword : 'rows'                            #count
         | 'columns'                         #countColumns
@@ -8,17 +8,13 @@ keyword : 'rows'                            #count
         | 'replace' WORD WORD               #replace
         | 'takeColumns' WORD+               #takeColumns
         | 'find' WORD+                      #findWords
-        | 'match' PATTERN                   #match
+        | 'match' WORD+                     #match
         ;
 
-WORD : [a-zA-Z0-9]+;
+WORD : ((SYMBOLS*)ALPHANUMERIC(SYMBOLS*))+;
 
-PATH_SEP : [/];
-FILENAME : (((PATH_SEP*)WORD('.')*(PATH_SEP*))+)('.')*(WORD)*;
-
-
-PATTERN : '{' (.*?) '}'
-        ;
+ALPHANUMERIC : [a-zA-Z0-9]+;
+SYMBOLS : ('~' | '`' |'@' | '#' |'$' | '%' |'^' | '&' |'*' | '(' |')' | '_' |'-' | '=' |'+' | '[' |']' | '|' | '{' | '}' | '\\' | '/' | ',' | '"' | '?' | '.' | '<' | '>');
 
 WS  : [ \r\t\u000C\n]+ -> skip
     ;
