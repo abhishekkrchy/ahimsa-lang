@@ -5,10 +5,10 @@ import io.vavr.collection.List;
 
 public class FindWords implements Eval {
 
-    private final List<String> wordsToFind;
+    private final String wordToFind;
 
-    public FindWords(List<String> wordsToFind){
-        this.wordsToFind = wordsToFind;
+    public FindWords(String wordToFind) {
+        this.wordToFind = wordToFind;
     }
 
     @Override
@@ -16,12 +16,10 @@ public class FindWords implements Eval {
         return data.filter(this::containsAny);
     }
 
-    private boolean containsAny(List<String> data){
-        for(String word: wordsToFind){
-            for (String sourceStr : data){
-                if (sourceStr.contains(word)){
-                    return true;
-                }
+    private boolean containsAny(List<String> data) {
+        for (String sourceStr : data) {
+            if (sourceStr.contains(wordToFind)) {
+                return true;
             }
         }
         return false;

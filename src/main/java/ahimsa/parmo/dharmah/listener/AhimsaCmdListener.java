@@ -45,7 +45,7 @@ public class AhimsaCmdListener extends AhimsaBaseListener {
 
     @Override
     public void enterFindWords(AhimsaParser.FindWordsContext ctx) {
-        evalPipeBuilder.after(new FindWords(List.ofAll(ctx.WORD()).map(TerminalNode::getText)));
+        evalPipeBuilder.after(new FindWords(getFullText(ctx).replace("find", "").trim()));
     }
 
     @Override
